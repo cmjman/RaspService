@@ -3,12 +3,16 @@
 # @Author: ShiningChan
 # @Date:   2014-02-12 16:52:34
 # @Last Modified by:   ShiningChan
-# @Last Modified time: 2014-02-12 21:48:57
+# @Last Modified time: 2014-02-12 22:57:45
+
+from RPi import GPIO
+import time
+
+PIN = 7
 
 class DHT11():
     
     def __init__(self):
-    	PIN = 7
     	GPIO.setwarnings(False)
     	GPIO.setmode(GPIO.BOARD)
 	

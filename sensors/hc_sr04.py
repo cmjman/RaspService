@@ -3,14 +3,19 @@
 # @Author: ShiningChan
 # @Date:   2014-02-12 21:25:46
 # @Last Modified by:   ShiningChan
-# @Last Modified time: 2014-02-12 21:48:24
+# @Last Modified time: 2014-02-12 22:58:04
+
+from RPi import GPIO
+import time
+
+GPIO_TRIGGER = 23
+GPIO_ECHO = 24
 
 class HC_SR04():
 
 	def __init__(self):
 	 	GPIO.setmode(GPIO.BCM)
-		GPIO_TRIGGER = 23
-		GPIO_ECHO = 24
+		
 		print "Ultrasonic Measurement init"
 
 		GPIO.setup(GPIO_TRIGGER,GPIO.OUT)
