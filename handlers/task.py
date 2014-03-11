@@ -10,6 +10,7 @@ from model.base import Switch, User, Task
 from error import HTTPAPIError
 from scheduler.scheduler import *
 import time
+from datetime import datetime
 import json
 
 class AddTaskHandler(BaseHandler):
@@ -26,15 +27,15 @@ class AddTaskHandler(BaseHandler):
 
 		target_status = self.get_argument('target_status')
 		if_expression = self.get_argument('if_expression')
-		create_time = time.time
-		modified_time = time.time
+		create_time = datetime.now()
+		modified_time = datetime.now()
 		task = Task(switch_id = switch_id, user_id = user_id, target_status = target_status, if_expression = if_expression, create_time = create_time, modified_time = modified_time )
 		self.session.add(task)
 		self.session.commit()
 	
 		dict_exp = json.loads(if_expression)
 		
-		sched.add_job(checkConditions(dict_exp,task.id),hours = 0.5)
+		sched.add_interval_job(lambda:checkConditions(dict_exp,task.id),hours = 0.5)
 		sched.start()
 
 		result = {"result":"1"}	

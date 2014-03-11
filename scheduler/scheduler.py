@@ -30,6 +30,7 @@ sched.add_listener(err_listener, apscheduler.events.EVENT_JOB_ERROR | apschedule
 regExp = "(>=|<=|>|<|!=|==|=)"
 
 def opCompare(op,par1,par2):
+	print "par1:"+par1+"par2:"+par2
 	if op == "<=":
 		return par1 <= par2
 	elif op == ">=":
@@ -45,15 +46,18 @@ def opCompare(op,par1,par2):
 
 
 def checkTemperatue(temperature):
-	op = str(re.match(regExp,temperature))
+	op = re.match(regExp,temperature).group(0)
 	parseTemp = temperature.lstrip(op)
 	temp = dht11.getTemperature()
+	print "getTemp:"+temp
+	print "op:"+op+"parseTemp:"+parseTemp
 	return opCompare(op,temp,parseTemp)
 
 def checkHumidity(humidity):
 	op = str(re.match(regExp,humidity))
 	parseHumi = humidity.lstrip(op)
 	humi = dht11.getHumidity()
+	print "getHumi:"+humi
 	return opCompare(op,humi,parseHumi)
 
 

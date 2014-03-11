@@ -12,13 +12,6 @@ class DHT11():
 
 	def __init__(self,PIN):
 		self.PIN = PIN
-		GPIO.setmode(GPIO.BCM)
-		GPIO.setup(PIN,GPIO.OUT)
-		GPIO.output(PIN,GPIO.HIGH)
-		time.sleep(0.025)
-		GPIO.output(PIN,GPIO.LOW)
-		time.sleep(0.02)
-		GPIO.setup(PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 		self.Temperature = ""
 		self.Humidity = ""
 
@@ -26,6 +19,13 @@ class DHT11():
 		return str(int(string_num, 2))
 
 	def getData(self):
+		GPIO.setmode(GPIO.BCM)
+                GPIO.setup(self.PIN,GPIO.OUT)
+                GPIO.output(self.PIN,GPIO.HIGH)
+                time.sleep(0.025)
+                GPIO.output(self.PIN,GPIO.LOW)
+                time.sleep(0.02)
+                GPIO.setup(self.PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 		data = []
 		for i in range(0,500):
 		   data.append(GPIO.input(self.PIN))
