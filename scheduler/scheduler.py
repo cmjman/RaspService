@@ -11,6 +11,8 @@ from sensors.dht11 import DHT11
 from sensors.hc_sr04 import HC_SR04
 from sensors.hc_sr501 import HC_SR501
 from model.base import *
+import apscheduler
+import re
 
 session = DB_Session()
 dht11 = DHT11(4)
@@ -43,14 +45,14 @@ def opCompare(op,par1,par2):
 
 
 def checkTemperatue(temperature):
-	op = re.match(regExp)
-	parseTemp = temperature.lstrtip(op)
+	op = str(re.match(regExp,temperature))
+	parseTemp = temperature.lstrip(op)
 	temp = dht11.getTemperature()
 	return opCompare(op,temp,parseTemp)
 
 def checkHumidity(humidity):
-	op = re.match(regExp)
-	parseHumi = humidity.lstrtip(op)
+	op = str(re.match(regExp,humidity))
+	parseHumi = humidity.lstrip(op)
 	humi = dht11.getHumidity()
 	return opCompare(op,humi,parseHumi)
 
@@ -59,7 +61,7 @@ def checkConditions(conditions,taskId):
 
 	result = 1
 
-	for key in conditions.keys:
+	for key in conditions.keys():
 		if key == "temperature":
 			result = result & checkTemperatue(conditions[key])
 		elif key == "humidity":

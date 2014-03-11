@@ -11,7 +11,7 @@ from sensors.hc_sr04 import HC_SR04
 from sensors.hc_sr501 import HC_SR501
 
 if __name__ == '__main__':
-    dht11 = DHT11()   
+    dht11 = DHT11(4)   
     print dht11.getTemperature()
     print dht11.getHumidity()
 

@@ -8,8 +8,9 @@
 from handlers.base import * 
 from model.base import Switch, User, Task
 from error import HTTPAPIError
-from scheduler.scheduler import sched
+from scheduler.scheduler import *
 import time
+import json
 
 class AddTaskHandler(BaseHandler):
 	
@@ -30,8 +31,10 @@ class AddTaskHandler(BaseHandler):
 		task = Task(switch_id = switch_id, user_id = user_id, target_status = target_status, if_expression = if_expression, create_time = create_time, modified_time = modified_time )
 		self.session.add(task)
 		self.session.commit()
-
-		sched.add_job(checkConditions(if_expression,task.task_id),hours = 0.5)
+	
+		dict_exp = json.loads(if_expression)
+		
+		sched.add_job(checkConditions(dict_exp,task.id),hours = 0.5)
 		sched.start()
 
 		result = {"result":"1"}	

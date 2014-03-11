@@ -11,6 +11,7 @@ import time
 class DHT11():
 
 	def __init__(self,PIN):
+		self.PIN = PIN
 		GPIO.setmode(GPIO.BCM)
 		GPIO.setup(PIN,GPIO.OUT)
 		GPIO.output(PIN,GPIO.HIGH)
@@ -18,8 +19,8 @@ class DHT11():
 		GPIO.output(PIN,GPIO.LOW)
 		time.sleep(0.02)
 		GPIO.setup(PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-		self.Temperature=''
-		self.Humidity=''
+		self.Temperature = ""
+		self.Humidity = ""
 
 	def bin2dec(self,string_num):
 		return str(int(string_num, 2))
@@ -27,7 +28,7 @@ class DHT11():
 	def getData(self):
 		data = []
 		for i in range(0,500):
-		   data.append(GPIO.input(4))
+		   data.append(GPIO.input(self.PIN))
 		bit_count = 0
 		tmp = 0
 		count = 0
@@ -63,8 +64,7 @@ class DHT11():
 
 		except:
 			print "ERR_RANGE"
-			exit(0)
-
+			return 0
 		try:
 			for i in range(0, 8):
 				bit_count = 0
@@ -83,8 +83,8 @@ class DHT11():
 					crc = crc + "0"
 		except:
 			print "ERR_RANGE"
-			exit(0)
-
+			return 0
+		
 		self.Humidity = self.bin2dec(HumidityBit)
 		self.Temperature = self.bin2dec(TemperatureBit)
 
@@ -93,11 +93,16 @@ class DHT11():
 			print "Temperature:"+ self.Temperature +"C"
 		else:
 			print "ERR_CRC"
+			return 0
+		return 1
+			
 
 	def getTemperature(self):
-		self.getData()
+		while(self.getData() == 0):
+			pass
 		return self.Temperature
 
 	def getHumidity(self):
-		self.getData()
+		while(self.getData() == 0):
+			pass
 		return self.Humidity
