@@ -71,7 +71,7 @@ class Task(BaseModel):
 	if_expression = Column(String(100))								#操作条件表达式，为空立即进行操作 不为空时，以JSON字符串形式存入KV对，"-"做连接符，","做分隔符，列出的条件都满足才会触发（and），暂不考虑or的情况
 	result = Column(Integer, server_default = text('0'))			#操作结果 0操作中，1成功，2失败
 	create_time = Column(TIMESTAMP,server_default = text('CURRENT_TIMESTAMP'))
-	modified_time = Column(TIMESTAMP,server_default = text('CURRENT_TIMESTAMP'))
+	modified_time = Column(TIMESTAMP)
 
 	callbacks = []
 	@classmethod
@@ -100,9 +100,9 @@ class SensorData(BaseModel):
 	sensor_id = Column(Integer)										#传感器id
 	data = Column(String(100))											#收集到的传感器数据
 	create_time = Column(TIMESTAMP,server_default = text('CURRENT_TIMESTAMP'))
-	modified_time = Column(TIMESTAMP,server_default = text('CURRENT_TIMESTAMP'))
+	modified_time = Column(TIMESTAMP)
 
 if __name__ == "__main__":
-	#init_db()
+	init_db()
 	#drop_db()
 	pass
