@@ -13,9 +13,7 @@ class AddSensorHandler(BaseHandler):
 	def post(self):
 		name = self.get_argument('name')
 		s_type = self.get_argument('type')
-		create_time = datetime.now()
-		modified_time = datetime.now()
-		sensor = Sensor(name = name, type = s_type, create_time = create_time, modified_time = modified_time)
+		sensor = Sensor(sensor_name = name, sensor_type = s_type)
 
 		self.session.add(sensor)
 		self.session.commit()

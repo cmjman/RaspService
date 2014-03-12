@@ -12,8 +12,11 @@ from sensors.hc_sr04 import HC_SR04
 from sensors.hc_sr501 import HC_SR501
 from model.base import *
 import apscheduler
+import logging
+import json
 import re
 
+logging.basicConfig()
 session = DB_Session()
 dht11 = DHT11(4)
 sched = Scheduler()
@@ -77,11 +80,14 @@ def checkConditions(conditions,taskId):
 
 @sched.cron_schedule(hour='*')
 def saveSensorData():
+  print "cron goes"
   temperature = dht11.getTemperature()
   humidity = dht11.getHumidity()
-  data = {"temperature":temperature,"humidity":humidity}
+  data = json.dumps({"temperature":temperature,"humidity":humidity})
   create_time = datetime.now()
   modified_time = datetime.now()
-  sensorData = SensorData(sensor_id = '1', data = data, create_time = create_time, modified_time = modified_ime)
-  self.session.add(sensorData)
-  self.session.commit()
+  sensorData = SensorData(sensor_id = '1', data = data, create_time = create_time, modified_time = modified_time)
+  session.add(sensorData)
+  session.commit()
+
+sched.start()

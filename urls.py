@@ -21,7 +21,7 @@ urls = [
 (base+'getSwitchStatus',GetSwitchStatusHandler),
 (base+'changeSwitchStatus',ChangeSwitchStatusHandler),
 (base+'delSwitch',DelSwitchHandler),
-(base+'addSensor',AddSesnorHandler),
+(base+'addSensor',AddSensorHandler),
 (base+'login',LoginHandler),
 (base+'register',RegisterHandler),
 ('/',HomeHandler)
