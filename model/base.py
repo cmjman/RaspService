@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 # @Author: shiningchan
 # @Date:   2014-01-23 14:24:19
-# @Last Modified by:   shiningchan
-# @Last Modified time: 2014-01-25 16:59:38
+# @Last Modified by:   ShiningChan
+# @Last Modified time: 2014-03-13 14:32:58
 
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
@@ -12,12 +12,18 @@ from sqlalchemy import Column
 from sqlalchemy.types import Integer, String, Boolean, TIMESTAMP
 from sqlalchemy.sql.expression import text
 
-DB_CONNECT_STRING = "mysql+mysqldb://root:123456@192.168.1.150/rasp?charset=utf8"
+#DB_CONNECT_STRING = "mysql+mysqldb://root:123456@192.168.1.150/rasp?charset=utf8"
+DB_CONNECT_STRING = "mysql+mysqldb://root:123456@127.0.0.1/rasp?charset=utf8"
 engine = create_engine(DB_CONNECT_STRING , echo = True)
 DB_Session = sessionmaker(bind = engine)
 session = DB_Session()
 
 BaseModel = declarative_base()
+
+def sqlalchemy_json(self):
+    obj_dict = self.__dict__
+    return dict((key, obj_dict[key]) for key in obj_dict if not key.startswith('_'))
+BaseModel.to_dict = sqlalchemy_json
 
 def init_db():
 	BaseModel.metadata.create_all(engine)

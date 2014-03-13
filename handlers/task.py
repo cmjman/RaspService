@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 # @Author: shiningchan
 # @Date:   2014-01-24 16:02:08
-# @Last Modified by:   shiningchan
-# @Last Modified time: 2014-01-25 17:01:36
+# @Last Modified by:   ShiningChan
+# @Last Modified time: 2014-03-13 14:17:24
 
 from handlers.base import BaseHandler 
 from model.base import Switch, User, Task
@@ -28,3 +28,12 @@ class AddTaskHandler(BaseHandler):
 		task = Task(switch_id = switch_id, user_id = user_id, target_status = target_status, if_expression = if_expression, create_time = create_time, modified_time = modified_time )
 		self.session.add(task)
 		self.session.commit()
+
+class GetTaskHandler(BaseHandler):
+
+	def get(self):
+		page = self.get_argument('page')
+		page_size = 10;
+		tasks = self.session.query(Task).offset((int(page)-1)*page_size).limit(page_size).all()
+		tasks = {'tasks':[task.to_dict() for task in tasks]} 
+		self.finish(tasks)

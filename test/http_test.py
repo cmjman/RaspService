@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 # @Author: shiningchan
 # @Date:   2014-01-23 16:41:14
-# @Last Modified by:   shiningchan
-# @Last Modified time: 2014-01-25 17:12:13
+# @Last Modified by:   ShiningChan
+# @Last Modified time: 2014-03-12 21:01:47
 
 import urllib
 import urllib2
@@ -15,6 +15,12 @@ def post(url, data):
 	data = urllib.urlencode(data)
 	opener = urllib2.build_opener(urllib2.HTTPCookieProcessor())
 	response = opener.open(req, data)
+	return response.read()
+
+def get(url, data):
+	data = urllib.urlencode(data)
+	full_url = url + '?' + data
+	response = urllib.urlopen(full_url)
 	return response.read()
 
 def registerTest():
@@ -32,9 +38,9 @@ def addTaskTest():
 	data = {'user_id':'1','switch_id':'1','target_status':'True','if_expression':''}
 	print post(posturl, data)
 
-def addSwitchTest():
+def addSwitchTest(name,level):
 	posturl = "http://127.0.0.1:8080/service/addSwitch"
-	data = {'name':'switch01','level':'0'}
+	data = {'name':name,'level':level}
 	print post(posturl, data)
 
 def delSwitchTest():
@@ -42,9 +48,16 @@ def delSwitchTest():
 	data = {'switch_id':'2'}
 	print post(posturl, data)
 
+def getSwitchTest(page):
+	posturl = "http://127.0.0.1:8080/service/getSwitch"
+	data = {'page':page}
+	print get(posturl, data)
+
 if __name__ == '__main__':
 	#registerTest()
 	#loginTest()
 	#addTaskTest()
-	#addSwitchTest()
-	delSwitchTest()
+	#delSwitchTest()
+	#for integer in range(10):
+		#addSwitchTest("switch"+str(integer),"0")
+	getSwitchTest(1)
