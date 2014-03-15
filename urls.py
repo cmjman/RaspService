@@ -3,20 +3,24 @@
 # @Author: shiningchan
 # @Date:   2014-01-20 10:41:30
 # @Last Modified by:   ShiningChan
-# @Last Modified time: 2014-03-13 14:15:58
+# @Last Modified time: 2014-03-16 00:15:32
 
 from handlers.switch import *
 from handlers.user import *
 from handlers.task import *
 from handlers.home import *
 
+base = '/service/'
+
 urls = [
-('/service/addTask',AddTaskHandler),
-('/service/getTask',GetTaskHandler),
-('/service/addSwitch',AddSwitchHandler),
-('/service/getSwitch',GetSwitchHandler),
-('/service/delSwitch',DelSwitchHandler),
-('/service/login',LoginHandler),
-('/service/register',RegisterHandler),
+(base+'addTask',AddTaskHandler),
+(base+'getTask',GetTaskHandler),
+(base+'addSwitch',AddSwitchHandler),
+(base+'getSwitch',GetSwitchHandler),
+(base+'getSwitchStatus',GetSwitchStatusHandler),
+(base+'changeSwitchStatus',ChangeSwitchStatusHandler),
+(base+'delSwitch',DelSwitchHandler),
+(base+'login',LoginHandler),
+(base+'register',RegisterHandler),
 ('/',HomeHandler)
 ]

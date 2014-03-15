@@ -3,7 +3,7 @@
 # @Author: shiningchan
 # @Date:   2014-01-20 10:46:18
 # @Last Modified by:   ShiningChan
-# @Last Modified time: 2014-03-13 14:15:13
+# @Last Modified time: 2014-03-15 22:11:50
 
 from model.base import User
 from handlers.base import BaseHandler
@@ -17,7 +17,7 @@ class RegisterHandler(BaseHandler):
 		user = self.session.query(User).filter(User.nick == nick).first()
 
 		if user is None:
-			user = User(nick=nick, password = password_md5)
+			user = User(nick=nick, password = password_md5, picture = '',level = '')
 			self.session.add(user)
 			self.session.commit()
 			result = 1
@@ -35,6 +35,9 @@ class LoginHandler(BaseHandler):
 		password_md5 = hashlib.md5(password).hexdigest().upper()
 		user = self.session.query(User).filter(User.nick == nick).first()
 		password_real = user.password
-		result = {"result":password_md5 == password_real}
+		if password_md5 == password_real:
+			result = {"result":"1","user":user.to_dict()}
+		else:
+			result = {"result":"0"}
 		
 		self.finish(result)

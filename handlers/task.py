@@ -3,7 +3,7 @@
 # @Author: shiningchan
 # @Date:   2014-01-24 16:02:08
 # @Last Modified by:   ShiningChan
-# @Last Modified time: 2014-03-13 14:17:24
+# @Last Modified time: 2014-03-15 21:19:54
 
 from handlers.base import BaseHandler 
 from model.base import Switch, User, Task
@@ -14,6 +14,7 @@ class AddTaskHandler(BaseHandler):
 	
 	def post(self):
 		switch_id = self.get_argument('switch_id')
+
 		if self.session.query(Switch).get(switch_id) is None :
 			raise HTTPAPIError(404)
 		
@@ -29,11 +30,15 @@ class AddTaskHandler(BaseHandler):
 		self.session.add(task)
 		self.session.commit()
 
+		result = {"result":"1"}	
+		self.finish(result)
+
 class GetTaskHandler(BaseHandler):
 
 	def get(self):
 		page = self.get_argument('page')
 		page_size = 10;
-		tasks = self.session.query(Task).offset((int(page)-1)*page_size).limit(page_size).all()
+		user_id = self.get_argument('user_id')
+		tasks = self.session.query(Task).offset((int(page)-1)*page_size).limit(page_size).filter(Task.user_id == user_id).all()
 		tasks = {'tasks':[task.to_dict() for task in tasks]} 
 		self.finish(tasks)

@@ -3,7 +3,7 @@
 # @Author: shiningchan
 # @Date:   2014-01-23 16:41:14
 # @Last Modified by:   ShiningChan
-# @Last Modified time: 2014-03-12 21:01:47
+# @Last Modified time: 2014-03-16 00:34:28
 
 import urllib
 import urllib2
@@ -33,9 +33,9 @@ def loginTest():
 	data = {'user_id':'1','nick':'testUser','password':'123456'}
 	print post(posturl, data)
 
-def addTaskTest():
+def addTaskTest(user_id,switch_id):
 	posturl = "http://127.0.0.1:8080/service/addTask"
-	data = {'user_id':'1','switch_id':'1','target_status':'True','if_expression':''}
+	data = {'user_id':user_id,'switch_id':switch_id,'target_status':'1','if_expression':''}
 	print post(posturl, data)
 
 def addSwitchTest(name,level):
@@ -53,6 +53,12 @@ def getSwitchTest(page):
 	data = {'page':page}
 	print get(posturl, data)
 
+def changeSwitchStatusTest(status,switch_id):
+	posturl = "http://127.0.0.1:8080/service/changeSwitchStatus"
+	data = {'switch_id':switch_id,'status':status}
+	print post(posturl, data)
+
+
 if __name__ == '__main__':
 	#registerTest()
 	#loginTest()
@@ -60,4 +66,7 @@ if __name__ == '__main__':
 	#delSwitchTest()
 	#for integer in range(10):
 		#addSwitchTest("switch"+str(integer),"0")
-	getSwitchTest(1)
+	#etSwitchTest(1)
+	#for integer in range(10):
+		#addTaskTest("1",str(integer+1))
+	changeSwitchStatusTest("0","1");

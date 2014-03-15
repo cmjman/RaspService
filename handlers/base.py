@@ -3,9 +3,10 @@
 # @Author: shiningchan
 # @Date:   2014-01-23 14:19:06
 # @Last Modified by:   ShiningChan
-# @Last Modified time: 2014-03-13 13:35:47
+# @Last Modified time: 2014-03-16 00:09:08
 
 import tornado.web
+import tornado.websocket
 from model.base import *
 
 class BaseHandler(tornado.web.RequestHandler):
@@ -24,3 +25,7 @@ class BaseHandler(tornado.web.RequestHandler):
 	
 	def on_finish(self):
 		self.session.close()
+
+class BaseWebsockHandler(tornado.websocket.WebSocketHandler):
+	def initialize(self):
+		self.session = DB_Session()

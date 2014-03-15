@@ -3,7 +3,7 @@
 # @Author: shiningchan
 # @Date:   2014-01-23 14:24:19
 # @Last Modified by:   ShiningChan
-# @Last Modified time: 2014-03-13 14:32:58
+# @Last Modified time: 2014-03-16 00:28:08
 
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
@@ -22,7 +22,7 @@ BaseModel = declarative_base()
 
 def sqlalchemy_json(self):
     obj_dict = self.__dict__
-    return dict((key, obj_dict[key]) for key in obj_dict if not key.startswith('_'))
+    return dict((key, obj_dict[key]) for key in obj_dict if not key.startswith('_') and key.find('password'))
 BaseModel.to_dict = sqlalchemy_json
 
 def init_db():
@@ -47,6 +47,17 @@ class Switch(BaseModel):
 	name = Column(String(30))
 	status = Column(Boolean, server_default = text('False'))      	#开关当前状态
 	level = Column(Integer)       									#最小可操作等级
+
+	callbacks = []
+	def register(self, callback):
+		self.callbacks.append(callback)
+
+	def unregister(self, callback):
+		self.callbacks.remove(callback)
+
+	def notifyCallbacks(self):
+		for callback in self.callbacks:
+			callback(self.status)
 
 class Task(BaseModel):
 	__tablename__ = 'task'											#开关操作任务表，设置任务后由异步线程调用

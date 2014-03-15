@@ -3,11 +3,12 @@
 # @Author: shiningchan
 # @Date:   2014-01-23 15:52:48
 # @Last Modified by:   ShiningChan
-# @Last Modified time: 2014-03-13 14:33:12
+# @Last Modified time: 2014-03-16 00:33:00
 
-from handlers.base import BaseHandler 
+from handlers.base import *
 from model.base import Switch
 from error import HTTPAPIError
+
 
 class AddSwitchHandler(BaseHandler):
 	
@@ -27,6 +28,32 @@ class GetSwitchHandler(BaseHandler):
 		switches = {'switches':[switch.to_dict() for switch in switches]} 
 		self.finish(switches)
 
+class GetSwitchStatusHandler(BaseWebsockHandler):
+
+	def open(self):
+		switch = self.session.query(Switch).get(1)
+		switch.register(self.callback)
+
+	def on_close(self):
+		switch = self.session.query(Switch).get(1)
+		switch.unregister(self.callback)
+			
+	def on_message(self,msg):
+		pass
+
+	def callback(self,status):
+		self.write_message('{"status":"%d"}' % status)
+
+class ChangeSwitchStatusHandler(BaseHandler):
+
+	def post(self):
+		status = self.get_argument('status')
+		switch_id = self.get_argument('switch_id')
+		switch = self.session.query(Switch).get(switch_id)
+		switch.status = int(status)
+		switch.notifyCallbacks()
+
+	
 class DelSwitchHandler(BaseHandler):
 
 	def post(self):
