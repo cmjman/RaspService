@@ -3,7 +3,7 @@
 # @Author: shiningchan
 # @Date:   2014-01-23 14:24:19
 # @Last Modified by:   ShiningChan
-# @Last Modified time: 2014-03-16 00:28:08
+# @Last Modified time: 2014-03-16 18:44:52
 
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
@@ -49,15 +49,17 @@ class Switch(BaseModel):
 	level = Column(Integer)       									#最小可操作等级
 
 	callbacks = []
-	def register(self, callback):
-		self.callbacks.append(callback)
+	@classmethod
+	def register(cls, callback):
+		cls.callbacks.append(callback)
 
-	def unregister(self, callback):
-		self.callbacks.remove(callback)
+	@classmethod
+	def unregister(cls, callback):
+		cls.callbacks.remove(callback)
 
 	def notifyCallbacks(self):
 		for callback in self.callbacks:
-			callback(self.status)
+			callback(self.id,self.status)
 
 class Task(BaseModel):
 	__tablename__ = 'task'											#开关操作任务表，设置任务后由异步线程调用

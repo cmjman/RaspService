@@ -3,7 +3,7 @@
 # @Author: shiningchan
 # @Date:   2014-01-23 15:52:48
 # @Last Modified by:   ShiningChan
-# @Last Modified time: 2014-03-16 00:33:00
+# @Last Modified time: 2014-03-16 18:47:28
 
 from handlers.base import *
 from model.base import Switch
@@ -31,26 +31,25 @@ class GetSwitchHandler(BaseHandler):
 class GetSwitchStatusHandler(BaseWebsockHandler):
 
 	def open(self):
-		switch = self.session.query(Switch).get(1)
-		switch.register(self.callback)
+		Switch.register(self.callback)
 
 	def on_close(self):
-		switch = self.session.query(Switch).get(1)
-		switch.unregister(self.callback)
+		Switch.unregister(self.callback)
 			
 	def on_message(self,msg):
 		pass
 
-	def callback(self,status):
-		self.write_message('{"status":"%d"}' % status)
+	def callback(self,switch_id,status):
+		self.write_message('{"switch_id":"%s","status":"%d"}'%(switch_id,status))
 
 class ChangeSwitchStatusHandler(BaseHandler):
 
 	def post(self):
-		status = self.get_argument('status')
 		switch_id = self.get_argument('switch_id')
+		status = self.get_argument('status')
 		switch = self.session.query(Switch).get(switch_id)
 		switch.status = int(status)
+		self.session.commit()
 		switch.notifyCallbacks()
 
 	

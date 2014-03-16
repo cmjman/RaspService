@@ -3,7 +3,7 @@
 # @Author: shiningchan
 # @Date:   2014-01-23 16:41:14
 # @Last Modified by:   ShiningChan
-# @Last Modified time: 2014-03-16 00:34:28
+# @Last Modified time: 2014-03-16 18:51:32
 
 import urllib
 import urllib2
@@ -53,7 +53,7 @@ def getSwitchTest(page):
 	data = {'page':page}
 	print get(posturl, data)
 
-def changeSwitchStatusTest(status,switch_id):
+def changeSwitchStatusTest(switch_id,status):
 	posturl = "http://127.0.0.1:8080/service/changeSwitchStatus"
 	data = {'switch_id':switch_id,'status':status}
 	print post(posturl, data)
@@ -69,4 +69,4 @@ if __name__ == '__main__':
 	#etSwitchTest(1)
 	#for integer in range(10):
 		#addTaskTest("1",str(integer+1))
-	changeSwitchStatusTest("0","1");
+	changeSwitchStatusTest("3","1");
