@@ -3,7 +3,7 @@
 # @Author: ShiningChan
 # @Date:   2014-02-12 16:52:34
 # @Last Modified by:   ShiningChan
-# @Last Modified time: 2014-03-25 14:24:56
+# @Last Modified time: 2014-03-25 14:37:18
 
 from RPi import GPIO
 import time
@@ -86,10 +86,10 @@ class DHT11():
 			print "ERR_RANGE"
 			exit(0)
 
-		Humidity = bin2dec(HumidityBit)
-		Temperature = bin2dec(TemperatureBit)
+		Humidity = self.bin2dec(HumidityBit)
+		Temperature = self.bin2dec(TemperatureBit)
 
-		if int(Humidity) + int(Temperature) - int(bin2dec(crc)) == 0:
+		if int(Humidity) + int(Temperature) - int(self.bin2dec(crc)) == 0:
 			print "Humidity:"+ Humidity +"%"
 			print "Temperature:"+ Temperature +"C"
 		else:
