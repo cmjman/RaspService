@@ -3,10 +3,11 @@
 # @Author: shiningchan
 # @Date:   2014-01-23 16:41:14
 # @Last Modified by:   ShiningChan
-# @Last Modified time: 2014-03-16 18:51:32
+# @Last Modified time: 2014-03-26 19:25:44
 
 import urllib
 import urllib2
+
 
 HOST_URL = "http://127.0.0.1:8080/service/"
 
@@ -35,7 +36,10 @@ def loginTest():
 
 def addTaskTest(user_id,switch_id):
 	posturl = "http://127.0.0.1:8080/service/addTask"
-	data = {'user_id':user_id,'switch_id':switch_id,'target_status':'1','if_expression':''}
+
+
+	if_expression = {"temperature":"20-30","humidity":"12,17"}
+	data = {'user_id':user_id,'switch_id':switch_id,'target_status':'1','if_expression':if_expression}
 	print post(posturl, data)
 
 def addSwitchTest(name,level):
@@ -58,7 +62,6 @@ def changeSwitchStatusTest(switch_id,status):
 	data = {'switch_id':switch_id,'status':status}
 	print post(posturl, data)
 
-
 if __name__ == '__main__':
 	#registerTest()
 	#loginTest()
@@ -69,4 +72,6 @@ if __name__ == '__main__':
 	#etSwitchTest(1)
 	#for integer in range(10):
 		#addTaskTest("1",str(integer+1))
-	changeSwitchStatusTest("3","1");
+	#changeSwitchStatusTest("3","1");
+
+	pass

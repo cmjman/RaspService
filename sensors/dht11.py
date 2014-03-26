@@ -3,16 +3,14 @@
 # @Author: ShiningChan
 # @Date:   2014-02-12 16:52:34
 # @Last Modified by:   ShiningChan
-# @Last Modified time: 2014-03-25 14:37:18
+# @Last Modified time: 2014-03-25 15:33:24
 
 from RPi import GPIO
 import time
 
-PIN = 4
-
 class DHT11():
 
-	def __init__(self):
+	def __init__(self,PIN):
 		GPIO.setmode(GPIO.BCM)
 		GPIO.setup(PIN,GPIO.OUT)
 		GPIO.output(PIN,GPIO.HIGH)
@@ -21,7 +19,7 @@ class DHT11():
 		time.sleep(0.02)
 		GPIO.setup(PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 		self.Temperature=''
-		self.Humidity=''	
+		self.Humidity=''
 
 	def bin2dec(self,string_num):
 		return str(int(string_num, 2))
