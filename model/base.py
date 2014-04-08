@@ -34,14 +34,14 @@ def drop_db():
 class User(BaseModel):
 	__tablename__ = 'user'
 
-	id = Column(Integer, primary_key = True) 
+	id = Column(Integer, primary_key = True)
 	nick = Column(String(30))
 	password = Column(String(32))   	#存储md5值
 	picture = Column(String(30))  		#用户头像（预留）
 	level = Column(Integer)       		#用户权限级别
 
 class Switch(BaseModel):
-	__tablename__ = 'switch'      
+	__tablename__ = 'switch'
 
 	id = Column(Integer, primary_key = True)
 	name = Column(String(30))
@@ -65,12 +65,12 @@ class Task(BaseModel):
 	__tablename__ = 'task'											#开关操作任务表，设置任务后由异步线程调用
 
 	id = Column(Integer, primary_key = True)
-	switch_id = Column(Integer)   
-	user_id = Column(Integer)			
-	target_status = Column(Boolean)									#目标状态 
+	switch_id = Column(Integer)
+	user_id = Column(Integer)
+	target_status = Column(Boolean)									#目标状态
 	if_expression = Column(String(100))								#操作条件表达式，为空立即进行操作 不为空时，以JSON字符串形式存入KV对，"-"做连接符，","做分隔符，列出的条件都满足才会触发（and），暂不考虑or的情况
 	result = Column(Integer, server_default = text('0'))			#操作结果 0操作中，1成功，2失败
-	create_time = Column(TIMESTAMP,server_default = text('CURRENT_TIMESTAMP'))    
+	create_time = Column(TIMESTAMP,server_default = text('CURRENT_TIMESTAMP'))
 	modified_time = Column(TIMESTAMP,server_default = text('CURRENT_TIMESTAMP'))
 
 	callbacks = []
@@ -90,17 +90,17 @@ class Sensor(BaseModel):
 	__tablename__ = 'sensor'										#传感器
 
 	id = Column(Integer, primary_key = True)
-	sensor_type = Column(Integer)									#传感器类型 1温湿度传感器 2运动传感器 3红外传感器		
+	sensor_type = Column(Integer)									#传感器类型 1温湿度传感器 2运动传感器 3红外传感器
 	sensor_name = Column(String(100))								#传感器名称
 
 class SensorData(BaseModel):
 	__tablename__ = 'sensordata'									#传感器数据记录
 
-	id = Column(Integer, primary_key = True) 						
+	id = Column(Integer, primary_key = True)
 	sensor_id = Column(Integer)										#传感器id
-	data = Column(String)											#收集到的传感器数据
-	create_time = Column(TIMESTAMP)    
-	modified_time = Column(TIMESTAMP)									
+	data = Column(String(100))											#收集到的传感器数据
+	create_time = Column(TIMESTAMP,server_default = text('CURRENT_TIMESTAMP'))
+	modified_time = Column(TIMESTAMP,server_default = text('CURRENT_TIMESTAMP'))
 
 if __name__ == "__main__":
 	#init_db()
