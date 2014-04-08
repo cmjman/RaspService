@@ -30,7 +30,6 @@ sched.add_listener(err_listener, apscheduler.events.EVENT_JOB_ERROR | apschedule
 regExp = "(>=|<=|>|<|!=|==|=)"
 
 def opCompare(op,par1,par2):
-	print "par1:"+par1+"par2:"+par2
 	if op == "<=":
 		return par1 <= par2
 	elif op == ">=":
@@ -50,7 +49,6 @@ def checkTemperatue(temperature):
 	parseTemp = temperature.lstrip(op)
 	temp = dht11.getTemperature()
 	print "getTemp:"+temp
-	print "op:"+op+"parseTemp:"+parseTemp
 	return opCompare(op,temp,parseTemp)
 
 def checkHumidity(humidity):
@@ -77,5 +75,13 @@ def checkConditions(conditions,taskId):
 		session.commit()
 		task.notifyCallbacks()
 
-
-
+@sched.cron_schedule(hour='*')
+def saveSensorData():
+  temperature = dht11.getTemperature()
+  humidity = dht11.getHumidity()
+  data = {"temperature":temperature,"humidity":humidity}
+  create_time = datetime.now()
+  modified_time = datetime.now()
+  sensorData = SensorData(sensor_id = '1', data = data, create_time = create_time, modified_time = modified_ime)
+  self.session.add(sensorData)
+  self.session.commit()
