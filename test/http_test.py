@@ -49,6 +49,13 @@ class HttpTestCase(unittest.TestCase):
 		data = {'user_id':user_id,'switch_id':switch_id,'target_status':'1','if_expression':exp_json}
 		print self.post(posturl, data)
 
+	def test_addSensor(self):
+		name = "dht11"
+		s_type = 1
+		posturl = REMOTE_URL + "addSensor"
+		data = {'name':name,'s_type':type}
+		print self.post(posturl,data)
+
 	def addSwitchTest(name,level):
 		posturl = "http://127.0.0.1:8080/service/addSwitch"
 		data = {'name':name,'level':level}

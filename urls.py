@@ -9,6 +9,7 @@ from handlers.switch import *
 from handlers.user import *
 from handlers.task import *
 from handlers.home import *
+from handlers.sensor import *
 
 base = '/service/'
 
@@ -20,6 +21,7 @@ urls = [
 (base+'getSwitchStatus',GetSwitchStatusHandler),
 (base+'changeSwitchStatus',ChangeSwitchStatusHandler),
 (base+'delSwitch',DelSwitchHandler),
+(base+'addSensor',AddSesnorHandler),
 (base+'login',LoginHandler),
 (base+'register',RegisterHandler),
 ('/',HomeHandler)
