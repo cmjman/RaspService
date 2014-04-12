@@ -11,6 +11,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy import Column
 from sqlalchemy.types import Integer, String, Boolean, TIMESTAMP
 from sqlalchemy.sql.expression import text
+import re
 
 #DB_CONNECT_STRING = "mysql+mysqldb://root:123456@192.168.1.150/rasp?charset=utf8"
 DB_CONNECT_STRING = "mysql+mysqldb://root:123456@127.0.0.1/rasp?charset=utf8"
@@ -22,7 +23,7 @@ BaseModel = declarative_base()
 
 def sqlalchemy_json(self):
     obj_dict = self.__dict__
-    return dict((key, obj_dict[key]) for key in obj_dict if not key.startswith('_') and key.find('password'))
+    return dict((key, obj_dict[key]) for key in obj_dict if re.search("^_|password|_time$",key) == None)
 BaseModel.to_dict = sqlalchemy_json
 
 def init_db():
@@ -47,7 +48,7 @@ class Switch(BaseModel):
 	name = Column(String(30))
 	status = Column(Boolean, server_default = text('False'))      	#开关当前状态
 	level = Column(Integer)       									#最小可操作等级
-  picture = Column(String(100))      #开关图片
+        picture = Column(String(100))      #开关图片
 
 	callbacks = []
 	@classmethod
