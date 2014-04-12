@@ -8,19 +8,23 @@
 import tornado.web
 import tornado.websocket
 from model.base import *
+import pdb
 
 class BaseHandler(tornado.web.RequestHandler):
 	def initialize(self):
 		self.session = DB_Session()
 
 	def finish(self, chunk=None):
-		if chunk is None :
+		print self.request
+		
+		if chunk is None: 
 			chunk = {}
 
 		if isinstance(chunk, dict):
 			chunk = {"meta":{"code":200}, "response": chunk}
-
+		
 		self.set_header("Content-Type","application/json; charset=UTF-8")
+		#pdb.set_trace()
 		super(BaseHandler, self).finish(chunk)
 	
 	def on_finish(self):
