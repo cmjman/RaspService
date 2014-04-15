@@ -11,7 +11,7 @@ import unittest
 import json
 
 HOST_URL = "http://127.0.0.1:8080/service/"
-REMOTE_URL ="http://192.168.1.120:8080/service/"
+REMOTE_URL ="http://192.168.1.111:8080/service/"
 
 class HttpTestCase(unittest.TestCase):
 
@@ -22,11 +22,11 @@ class HttpTestCase(unittest.TestCase):
 		response = opener.open(req, data)
 		return response.read()
 
-	def get(url, data):
+	def get(self,url, data):
 		data = urllib.urlencode(data)
 		full_url = url + '?' + data
 		response = urllib.urlopen(full_url)
-		return response.read()
+		return str(response.info())+response.read()
 
 	def registerTest():
 		posturl = HOST_URL + "register"
@@ -38,7 +38,7 @@ class HttpTestCase(unittest.TestCase):
 		data = {'user_id':'1','nick':'testUser','password':'123456'}
 		print post(posturl, data)
 
-	def test_addTask(self):
+	def _test_addTask(self):
 		user_id =1
 		switch_id = 1
 		posturl =  REMOTE_URL + "addTask"
@@ -49,27 +49,46 @@ class HttpTestCase(unittest.TestCase):
 		data = {'user_id':user_id,'switch_id':switch_id,'target_status':'1','if_expression':exp_json}
 		print self.post(posturl, data)
 
-	def test_addSensor(self):
+	def _test_addSensor(self):
 		name = "dht11"
 		s_type = 1
 		posturl = REMOTE_URL + "addSensor"
-		data = {'name':name,'s_type':type}
+		data = {'name':name,'type':type}
 		print self.post(posturl,data)
 
-	def addSwitchTest(name,level):
-		posturl = "http://127.0.0.1:8080/service/addSwitch"
+	def _test_addSwitch(self):
+		name ="test"
+		level = 0
+		posturl = REMOTE_URL+"addSwitch"
 		data = {'name':name,'level':level}
-		print post(posturl, data)
+		print self.post(posturl, data)
 
 	def delSwitchTest():
 		posturl = HOST_URL+ "delSwitch"
 		data = {'switch_id':'2'}
 		print post(posturl, data)
 
-	def getSwitchTest(page):
-		posturl = "http://127.0.0.1:8080/service/getSwitch"
+	def _test_getSwitch(self):
+		page = 1
+		url = REMOTE_URL + "getSwitch"
 		data = {'page':page}
-		print get(posturl, data)
+		print self.get(url, data)
+
+	def etag_get(self,url, data):
+		data = urllib.urlencode(data)
+		full_url = url + '?' + data
+		req = urllib2.Request(full_url)
+		#使用'8f475faacbd75cbfdc746d6ca10813e7230cd4cc'会报200，格式不同
+		req.add_header('If-None-Match','"8f475faacbd75cbfdc746d6ca10813e7230cd4cc"')
+		opener = urllib2.build_opener(urllib2.HTTPCookieProcessor())
+		response = opener.open(req)
+		return str(response.info())+response.read()
+
+	def test_etag_getSwitch(self):
+		page = 1
+		url = REMOTE_URL + "getSwitch"
+		data = {'page':page}
+		print self.etag_get(url, data)
 
 	def changeSwitchStatusTest(switch_id,status):
 		posturl = "http://127.0.0.1:8080/service/changeSwitchStatus"

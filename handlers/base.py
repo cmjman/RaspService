@@ -26,7 +26,7 @@ class BaseHandler(tornado.web.RequestHandler):
 		self.set_header("Content-Type","application/json; charset=UTF-8")
 		#pdb.set_trace()
 		super(BaseHandler, self).finish(chunk)
-	
+
 	def on_finish(self):
 		self.session.close()
 

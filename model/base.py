@@ -47,6 +47,7 @@ class Switch(BaseModel):
 	name = Column(String(30))
 	status = Column(Boolean, server_default = text('False'))      	#开关当前状态
 	level = Column(Integer)       									#最小可操作等级
+  picture = Column(String(100))      #开关图片
 
 	callbacks = []
 	@classmethod

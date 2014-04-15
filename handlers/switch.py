@@ -11,11 +11,12 @@ from error import HTTPAPIError
 
 
 class AddSwitchHandler(BaseHandler):
-	
+
 	def post(self):
 		name = self.get_argument('name')
 		level = self.get_argument('level')
-		switch = Switch(name = name, level = level)
+		picture = self.get_argument('picture')
+		switch = Switch(name = name, level = level, picture = picture)
 		self.session.add(switch)
 		self.session.commit()
 
@@ -25,7 +26,7 @@ class GetSwitchHandler(BaseHandler):
 		page = self.get_argument('page')
 		page_size = 10;
 		switches = self.session.query(Switch).offset((int(page)-1)*page_size).limit(page_size).all()
-		switches = {'switches':[switch.to_dict() for switch in switches]} 
+		switches = {'switches':[switch.to_dict() for switch in switches]}
 		self.finish(switches)
 
 class GetSwitchStatusHandler(BaseWebsockHandler):
@@ -35,7 +36,7 @@ class GetSwitchStatusHandler(BaseWebsockHandler):
 
 	def on_close(self):
 		Switch.unregister(self.callback)
-			
+
 	def on_message(self,msg):
 		pass
 
@@ -52,7 +53,7 @@ class ChangeSwitchStatusHandler(BaseHandler):
 		self.session.commit()
 		switch.notifyCallbacks()
 
-	
+
 class DelSwitchHandler(BaseHandler):
 
 	def post(self):

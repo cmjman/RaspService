@@ -8,7 +8,6 @@
 
 import sys
 sys.path.append('..') #导入上级目录到搜索路径
-from daemon.time_task import TimeTask
 from handlers.switch import Switch
 import re
 
@@ -22,8 +21,6 @@ def testRE():
 	print mth
 
 if __name__ == '__main__':
- 	#daemon = TimeTask('/tmp/pidfile',stdout='/tmp/result')
- 	#daemon.start_daemon()
  	testRE()
 
  	pass
