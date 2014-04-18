@@ -11,7 +11,7 @@ from handlers.task import *
 from handlers.home import *
 from handlers.sensor import *
 
-base = '/service/'
+base = r'/service/'
 
 urls = [
 (base+'addTask',AddTaskHandler),
@@ -22,7 +22,7 @@ urls = [
 (base+'changeSwitchStatus',ChangeSwitchStatusHandler),
 (base+'delSwitch',DelSwitchHandler),
 (base+'addSensor',AddSensorHandler),
-(base+'getSensorData',GetSensorDataHandler),
+(base+r'sensor_datas/1',GetSensorDataHandler),
 (base+'login',LoginHandler),
 (base+'register',RegisterHandler),
 ('/',HomeHandler)

@@ -20,6 +20,10 @@ class AddSensorHandler(BaseHandler):
 
 class GetSensorDataHandler(BaseHandler):
 	def get(self):
-		sensor_id = self.get_argument('sensor_id')
-		sensor_data = self.session.query(SensorData).filter(SensorData.sensor_id == sensor_id).limit(1).all()
-		self.finish(sensor_data.to_dict())
+		sensor_id = str(self.request.uri).split('/').pop()
+		datas = self.session.query(SensorData).filter(SensorData.sensor_id == sensor_id).limit(1).all()
+		datas = {'sensordata':[data.to_dict() for data in datas ]}
+		print datas
+		#for test
+		self.set_header("Access-Control-Allow-Origin", "*")
+		self.write(datas)
