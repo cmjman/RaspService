@@ -6,15 +6,16 @@
 # @Last Modified time: 2014-03-15 22:11:50
 
 from model.base import User
-from handlers.base import BaseHandler
+from handlers.base import RestHandler
 import hashlib
 
 
 class UserHandler(RestHandler):
 
 	def get(self):
-		nick = self.get_argument('nick')
-		password = self.get_argument('password')
+		data = self.get_request_data()
+		nick = data['nick']
+		password = data['password']
 		password_md5 = hashlib.md5(password).hexdigest().upper()
 		user = self.session.query(User).filter(User.nick == nick).first()
 		password_real = user.password
@@ -26,8 +27,9 @@ class UserHandler(RestHandler):
 		self.finish(result)
 
 	def post(self):
-		nick = self.get_argument('nick')
-		password = self.get_argument('password')
+		data = self.get_request_data()
+		nick = data['nick']
+		password = data['password']
 		password_md5 = hashlib.md5(password).hexdigest().upper()
 		user = self.session.query(User).filter(User.nick == nick).first()
 

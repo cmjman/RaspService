@@ -16,15 +16,17 @@ import json
 class TaskHandler(RestHandler):
 
 	def get(self):
-		page = self.get_argument('page')
+		data = self.get_request_data()
+		page = data['page']
 		page_size = 10;
-		user_id = self.get_argument('user_id')
+		user_id = data['user_id']
 		tasks = self.session.query(Task).filter(Task.user_id == user_id).offset((int(page)-1)*page_size).limit(page_size).all()
 		tasks = {'tasks':[task.to_dict() for task in tasks]}
 		self.finish(tasks)
 
 	def post(self):
-		switch_id = self.get_argument('switch_id')
+		data = self.get_request_data()
+		switch_id = data['switch_id']
 
 		if self.session.query(Switch).get(switch_id) is None :
 			raise HTTPAPIError(404)
@@ -49,13 +51,14 @@ class TaskHandler(RestHandler):
 		result = {"result":"1"}
 		self.finish(result)
 
-		def put(self):
-			task_id = self.get_argument('task_id')
-			result = self.get_argument('result')
-			task = self.session.query(Task).get(task_id)
-			task.result = int(result)
-			self.session.commit()
-			task.notifyCallbacks()
+	def put(self):
+		data = self.get_request_data()
+		task_id = data['task_id']
+		result = data['result']
+		task = self.session.query(Task).get(task_id)
+		task.result = int(result)
+		self.session.commit()
+		task.notifyCallbacks()
 
 class GetTaskResultHandler(BaseWebsockHandler):
 

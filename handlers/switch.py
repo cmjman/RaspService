@@ -13,30 +13,34 @@ from error import HTTPAPIError
 class SwitchHandler(RestHandler):
 
 	def get(self):
-		page = self.get_argument('page')
+		data = self.get_request_data()
+		page = data['page']
 		page_size = 10;
 		switches = self.session.query(Switch).offset((int(page)-1)*page_size).limit(page_size).all()
 		switches = {'switches':[switch.to_dict() for switch in switches]}
 		self.finish(switches)
 
 	def post(self):
-		name = self.get_argument('name')
-		level = self.get_argument('level')
-		picture = self.get_argument('picture')
+		data = self.get_request_data()
+		name = data['name']
+		level = data['level']
+		picture = data['picture']
 		switch = Switch(name = name, level = level, picture = picture)
 		self.session.add(switch)
 		self.session.commit()
 
 	def put(self):
-		switch_id = self.get_argument('switch_id')
-		status = self.get_argument('status')
+		data = self.get_request_data()
+		switch_id = data['switch_id']
+		status = data['status']
 		switch = self.session.query(Switch).get(switch_id)
 		switch.status = int(status)
 		self.session.commit()
 		switch.notifyCallbacks()
 
 	def delete(self):
-		switch_id = self.get_argument('switch_id')
+		data = self.get_request_data()
+		switch_id = data['switch_id']
 		switch = self.session.query(Switch).get(switch_id)
 		if switch is None:
 			raise HTTPAPIError(404)

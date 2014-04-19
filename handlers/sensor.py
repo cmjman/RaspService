@@ -8,22 +8,22 @@
 from handlers.base import RestHandler
 from model.base import Sensor,SensorData
 from datetime import datetime
+import pdb
 
 class SensorHandler(RestHandler):
 	def post(self):
-		name = self.get_argument('name')
-		s_type = self.get_argument('type')
+		data = self.get_request_data()
+		name = data['name']
+		s_type = data['type']
 		sensor = Sensor(sensor_name = name, sensor_type = s_type)
 
 		self.session.add(sensor)
 		self.session.commit()
 
 class SensorDataHandler(RestHandler):
-	def get(self):
-		sensor_id = str(self.request.uri).split('/').pop()
-		datas = self.session.query(SensorData).filter(SensorData.sensor_id == sensor_id).limit(1).all()
-		datas = {'sensordata':[data.to_dict() for data in datas ]}
-		print datas
+	def get(self,sensor_id):
+		datas = self.session.query(SensorData).filter(SensorData.sensor_id == sensor_id).all()
+		datas = {'sensorDatas':[data.to_dict() for data in datas ]}
 		#for test
 		self.set_header("Access-Control-Allow-Origin", "*")
 		self.write(datas)
