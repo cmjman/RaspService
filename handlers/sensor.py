@@ -5,11 +5,11 @@
 # @Last Modified by:   ShiningChan
 # @Last Modified time: 2014-03-25 15:29:25
 
-from handlers.base import BaseHandler
+from handlers.base import RestHandler
 from model.base import Sensor,SensorData
 from datetime import datetime
 
-class AddSensorHandler(BaseHandler):
+class SensorHandler(RestHandler):
 	def post(self):
 		name = self.get_argument('name')
 		s_type = self.get_argument('type')
@@ -18,7 +18,7 @@ class AddSensorHandler(BaseHandler):
 		self.session.add(sensor)
 		self.session.commit()
 
-class GetSensorDataHandler(BaseHandler):
+class SensorDataHandler(RestHandler):
 	def get(self):
 		sensor_id = str(self.request.uri).split('/').pop()
 		datas = self.session.query(SensorData).filter(SensorData.sensor_id == sensor_id).limit(1).all()

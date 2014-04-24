@@ -15,6 +15,12 @@ REMOTE_URL ="http://192.168.1.111:8080/service/"
 
 class HttpTestCase(unittest.TestCase):
 
+	def get(self,url, data):
+		data = urllib.urlencode(data)
+		full_url = url + '/' + data
+		response = urllib.urlopen(full_url)
+		return str(response.info())+response.read()
+
 	def post(self,url, data):
 		req = urllib2.Request(url)
 		data = urllib.urlencode(data)
@@ -22,23 +28,37 @@ class HttpTestCase(unittest.TestCase):
 		response = opener.open(req, data)
 		return response.read()
 
-	def get(self,url, data):
+	def put(self,url,data):
+		req = urllib2.Request(url)
+		req.get_method = lambda:"PUT"
 		data = urllib.urlencode(data)
-		full_url = url + '?' + data
-		response = urllib.urlopen(full_url)
-		return str(response.info())+response.read()
+		opener = urllib2.build_opener(urllib2.HTTPCookieProcessor())
+		response = opener.open(req, data)
+		return response.read()
 
-	def registerTest():
-		posturl = HOST_URL + "register"
+	def delete(self,url,data):
+		req = urllib2.Request(url)
+		req.get_method = lambda:"DELETE"
+		data = urllib.urlencode(data)
+		opener = urllib2.build_opener(urllib2.HTTPCookieProcessor())
+		response = opener.open(req, data)
+		return response.read()
+
+	def test_user_post(self):
+		posturl = HOST_URL + "user"
 		data = {'nick':'testUser','password':'123456'}
 		print post(posturl, data)
 
-	def loginTest():
-		posturl = "http://127.0.0.1:8080/service/login"
-		data = {'user_id':'1','nick':'testUser','password':'123456'}
-		print post(posturl, data)
+	def test_user_get(self):
 
-	def _test_addTask(self):
+		user_id = 1
+		password = '123456'
+		url =  REMOTE_URL + "user"
+		data = {'user_id':user_id,'password':password}
+
+		print self.get(url,data)
+
+	def test_task_post(self):
 		user_id =1
 		switch_id = 1
 		posturl =  REMOTE_URL + "addTask"
@@ -49,30 +69,45 @@ class HttpTestCase(unittest.TestCase):
 		data = {'user_id':user_id,'switch_id':switch_id,'target_status':'1','if_expression':exp_json}
 		print self.post(posturl, data)
 
-	def _test_addSensor(self):
+	def test_task_get(self):
+		page = 1
+		user_id = 1
+		url =  REMOTE_URL + "task"
+		data = {'user_id':user_id,'page':page}
+		print self.get(url,data)
+
+	def test_sensor_post(self):
 		name = "dht11"
 		s_type = 1
-		posturl = REMOTE_URL + "addSensor"
+		posturl = REMOTE_URL + "sensor"
 		data = {'name':name,'type':type}
 		print self.post(posturl,data)
 
-	def _test_addSwitch(self):
+	def test_switch_post(self):
 		name ="test"
 		level = 0
-		posturl = REMOTE_URL+"addSwitch"
+		posturl = REMOTE_URL+"switch"
 		data = {'name':name,'level':level}
 		print self.post(posturl, data)
 
-	def delSwitchTest():
-		posturl = HOST_URL+ "delSwitch"
+	def test_switch_delete(self):
+		posturl = HOST_URL+ "switch"
 		data = {'switch_id':'2'}
-		print post(posturl, data)
+		print self.delete(posturl, data)
 
-	def _test_getSwitch(self):
+	def test_switch_get(self):
 		page = 1
-		url = REMOTE_URL + "getSwitch"
+		url = REMOTE_URL + "switch"
 		data = {'page':page}
 		print self.get(url, data)
+
+	def test_switch_put(switch_id,status):
+
+		switch_id = 2
+		status = 1
+		url = HOST_URL+ "switch"
+		data = {'switch_id':switch_id,'status':status}
+		print self.delete(posturl, data)
 
 	def etag_get(self,url, data):
 		data = urllib.urlencode(data)
@@ -84,28 +119,11 @@ class HttpTestCase(unittest.TestCase):
 		response = opener.open(req)
 		return str(response.info())+response.read()
 
-	def test_etag_getSwitch(self):
+	def test_etag_switch_get(self):
 		page = 1
-		url = REMOTE_URL + "getSwitch"
+		url = REMOTE_URL + "switch"
 		data = {'page':page}
 		print self.etag_get(url, data)
 
-	def changeSwitchStatusTest(switch_id,status):
-		posturl = "http://127.0.0.1:8080/service/changeSwitchStatus"
-		data = {'switch_id':switch_id,'status':status}
-		print post(posturl, data)
-
 if __name__ == '__main__':
 	unittest.main()
-	#registerTest()
-	#loginTest()
-	#addTaskTest()
-	#delSwitchTest()
-	#for integer in range(10):
-		#addSwitchTest("switch"+str(integer),"0")
-	#etSwitchTest(1)
-	#for integer in range(10):
-		#addTaskTest("1",str(integer+1))
-	#changeSwitchStatusTest("3","1");
-
-	pass

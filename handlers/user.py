@@ -9,7 +9,22 @@ from model.base import User
 from handlers.base import BaseHandler
 import hashlib
 
-class RegisterHandler(BaseHandler):
+
+class UserHandler(RestHandler):
+
+	def get(self):
+		nick = self.get_argument('nick')
+		password = self.get_argument('password')
+		password_md5 = hashlib.md5(password).hexdigest().upper()
+		user = self.session.query(User).filter(User.nick == nick).first()
+		password_real = user.password
+		if password_md5 == password_real:
+			result = {"result":"1","user":user.to_dict()}
+		else:
+			result = {"result":"0"}
+
+		self.finish(result)
+
 	def post(self):
 		nick = self.get_argument('nick')
 		password = self.get_argument('password')
@@ -23,21 +38,6 @@ class RegisterHandler(BaseHandler):
 			result = 1
 		else:
 			result = 0
-			
-		result = {"result":result}	
-		self.finish(result)
 
-
-class LoginHandler(BaseHandler):
-	def post(self):
-		nick = self.get_argument('nick')
-		password = self.get_argument('password')
-		password_md5 = hashlib.md5(password).hexdigest().upper()
-		user = self.session.query(User).filter(User.nick == nick).first()
-		password_real = user.password
-		if password_md5 == password_real:
-			result = {"result":"1","user":user.to_dict()}
-		else:
-			result = {"result":"0"}
-		
+		result = {"result":result}
 		self.finish(result)

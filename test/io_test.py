@@ -8,7 +8,6 @@
 
 import sys
 sys.path.append('..') #导入上级目录到搜索路径
-from handlers.switch import Switch
 import re
 
 def testRE():
@@ -20,7 +19,17 @@ def testRE():
 	mth = all.findall('>10 , =19 ,!=11,<1,==12,>12')
 	print mth
 
+def json(obj_dict):
+		print obj_dict
+		return dict((key, obj_dict[key]) for key in obj_dict if re.search("^_|password|_time$",key) == None )
+
+
+
 if __name__ == '__main__':
- 	testRE()
+ 	#testRE()
+
+	obj_dict = {"create_time":"123"}
+
+	print json(obj_dict)
 
  	pass
