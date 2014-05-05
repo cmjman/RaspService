@@ -11,13 +11,13 @@ import unittest
 import json
 
 HOST_URL = "http://127.0.0.1:8080/service/"
-REMOTE_URL ="http://192.168.1.111:8080/service/"
+REMOTE_URL ="http://192.168.1.112:8080/service/"
 
 class HttpTestCase(unittest.TestCase):
 
 	def get(self,url, data):
 		data = urllib.urlencode(data)
-		full_url = url + '/' + data
+		full_url = url + '?' + data
 		response = urllib.urlopen(full_url)
 		return str(response.info())+response.read()
 
@@ -44,12 +44,12 @@ class HttpTestCase(unittest.TestCase):
 		response = opener.open(req, data)
 		return response.read()
 
-	def test_user_post(self):
-		posturl = HOST_URL + "user"
+	def _test_user_post(self):
+		posturl = REMOTE_URL + "user"
 		data = {'nick':'testUser','password':'123456'}
-		print post(posturl, data)
+		print self.post(posturl, data)
 
-	def test_user_get(self):
+	def _test_user_get(self):
 
 		user_id = 1
 		password = '123456'
@@ -58,10 +58,10 @@ class HttpTestCase(unittest.TestCase):
 
 		print self.get(url,data)
 
-	def test_task_post(self):
+	def _test_task_post(self):
 		user_id =1
 		switch_id = 1
-		posturl =  REMOTE_URL + "addTask"
+		posturl =  REMOTE_URL + "task"
 
 		#if_expression = {"temperature":"20-30","humidity":"12,17"}
 		if_expression = {"temperature":">20"}
@@ -86,28 +86,29 @@ class HttpTestCase(unittest.TestCase):
 	def test_switch_post(self):
 		name ="test"
 		level = 0
+		picture = "picture"
 		posturl = REMOTE_URL+"switch"
-		data = {'name':name,'level':level}
+		data = {'name':name,'level':level,'picture':picture}
 		print self.post(posturl, data)
 
 	def test_switch_delete(self):
-		posturl = HOST_URL+ "switch"
-		data = {'switch_id':'2'}
+		posturl = REMOTE_URL+ "switch"
+		data = {'switch_id':'1'}
 		print self.delete(posturl, data)
 
-	def test_switch_get(self):
+	def _test_switch_get(self):
 		page = 1
 		url = REMOTE_URL + "switch"
 		data = {'page':page}
 		print self.get(url, data)
 
-	def test_switch_put(switch_id,status):
+	def _test_switch_put(self):
 
 		switch_id = 2
 		status = 1
-		url = HOST_URL+ "switch"
+		url = REMOTE_URL+ "switch"
 		data = {'switch_id':switch_id,'status':status}
-		print self.delete(posturl, data)
+		print self.delete(url, data)
 
 	def etag_get(self,url, data):
 		data = urllib.urlencode(data)
@@ -119,7 +120,7 @@ class HttpTestCase(unittest.TestCase):
 		response = opener.open(req)
 		return str(response.info())+response.read()
 
-	def test_etag_switch_get(self):
+	def _test_etag_switch_get(self):
 		page = 1
 		url = REMOTE_URL + "switch"
 		data = {'page':page}
