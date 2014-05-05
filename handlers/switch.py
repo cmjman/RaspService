@@ -32,9 +32,8 @@ class SwitchHandler(RestHandler):
 	def put(self):
 		data = self.get_request_data()
 		switch_id = data['switch_id']
-		status = data['status']
 		switch = self.session.query(Switch).get(switch_id)
-		switch.status = int(status)
+		switch.status = switch.status^1
 		self.session.commit()
 		switch.notifyCallbacks()
 
