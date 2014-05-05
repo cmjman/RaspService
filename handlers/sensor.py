@@ -23,7 +23,7 @@ class SensorHandler(RestHandler):
 class SensorDataHandler(RestHandler):
 	def get(self,sensor_id):
 		datas = self.session.query(SensorData).filter(SensorData.sensor_id == sensor_id).all()
-		datas = {'sensorDatas':[data.to_dict() for data in datas ]}
+		datas = {'sensorDatas':{'sensorDatas':[data.to_dict()['id'] for data in datas]},'sensorData':[data.to_dict() for data in datas ]}
 		#for test
 		self.set_header("Access-Control-Allow-Origin", "*")
 		self.write(datas)

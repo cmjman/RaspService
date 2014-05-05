@@ -9,7 +9,7 @@ Prefix = "service/"
 
 TORNADO_ROUTES = [
 
-    rest_routes(User, prefix = Prefix + "user",  handler = UserHandler),
+    rest_routes(User, prefix = Prefix + "user.*",  handler = UserHandler),
     rest_routes(Sensor, prefix = Prefix +"sensor", handler = SensorHandler),
     rest_routes(SensorData, prefix = Prefix+r"sensorDatas/(.*)", handler = SensorDataHandler),
     rest_routes(Switch, prefix = Prefix + "switch", handler = SwitchHandler),

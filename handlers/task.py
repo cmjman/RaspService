@@ -39,7 +39,8 @@ class TaskHandler(RestHandler):
 		if_expression = self.get_argument('if_expression')
 		create_time = datetime.now()
 		modified_time = datetime.now()
-		task = Task(switch_id = switch_id, user_id = user_id, target_status = target_status, if_expression = if_expression, create_time = create_time, modified_time = modified_time )
+		result = 0
+		task = Task(switch_id = switch_id, user_id = user_id, target_status = target_status, if_expression = if_expression, create_time = create_time, modified_time = modified_time, result =result )
 		self.session.add(task)
 		self.session.commit()
 
