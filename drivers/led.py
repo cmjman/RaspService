@@ -6,4 +6,4 @@ class LED():
     GPIO.setup(22, GPIO.OUT)
 
   def turn(self,bool):
-    GPIO.output(7,bool)
+    GPIO.output(22,bool)

@@ -8,7 +8,7 @@
 from handlers.base import *
 from model.base import Switch
 from error import HTTPAPIError
-from drivers import LED
+from drivers.led import LED
 
 class SwitchHandler(RestHandler):
 
