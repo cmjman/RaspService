@@ -7,9 +7,9 @@
 
 from datetime import datetime
 from apscheduler.scheduler import Scheduler
-from sensors.dht11 import DHT11
-from sensors.hc_sr04 import HC_SR04
-from sensors.hc_sr501 import HC_SR501
+from drivers.dht11 import DHT11
+from drivers.hc_sr04 import HC_SR04
+from drivers.hc_sr501 import HC_SR501
 from model.base import *
 import apscheduler
 import logging

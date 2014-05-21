@@ -8,7 +8,7 @@
 from handlers.base import *
 from model.base import Switch
 from error import HTTPAPIError
-
+from drivers import LED
 
 class SwitchHandler(RestHandler):
 
@@ -36,6 +36,8 @@ class SwitchHandler(RestHandler):
 		switch = self.session.query(Switch).get(switch_id)
 		switch.status = int(status)
 		self.session.commit()
+		l = LED()
+		l.turn(switch.status)
 		switch.notifyCallbacks()
 
 	def delete(self):
